@@ -1,0 +1,78 @@
+<!DOCTYPE html><html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bots Cloud - Python Bot Hosting</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0d1117;
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            margin-top: 50px;
+            padding: 20px;
+        }
+        .upload-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px cyan;
+        }
+        .btn {
+            background: cyan;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            box-shadow: 0 0 15px cyan;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 10px;
+            background: rgba(0, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bots Cloud - Python Bot Hosting</h1>
+        <div class="upload-box">
+            <form id="uploadForm">
+                <input type="file" id="bot_file" required><br><br>
+                <input type="text" id="bot_token" placeholder="Enter Bot Token" required><br><br>
+                <button type="submit" class="btn">Host Bot</button>
+            </form>
+        </div>
+        <div class="status" id="statusBox">
+            <h3>Bot Status:</h3>
+            <pre id="statusText">No bot hosted yet.</pre>
+        </div>
+    </div><script>
+    document.getElementById('uploadForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        let formData = new FormData();
+        formData.append("bot_file", document.getElementById("bot_file").files[0]);
+        formData.append("bot_token", document.getElementById("bot_token").value);
+        
+        fetch("/upload", { method: "POST", body: formData })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("statusText").innerText = data.message;
+            })
+            .catch(error => {
+                document.getElementById("statusText").innerText = "Error hosting bot";
+            });
+    });
+</script>
+
+</body>
+</html>
